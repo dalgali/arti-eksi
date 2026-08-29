@@ -1,0 +1,1191 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Artı Eksi · Öğretmenler için sınıf ve öğrenci takibi</title>
+<meta name="description" content="Artı Eksi, öğretmenlerin sınıf davranışını, ödevleri, projeleri ve birebir derslerini takip ettiği çevrimdışı çalışan bir mobil uygulamadır. Sunucu yok, reklam yok, veri cihazınızda kalır.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#46178F">
+<meta property="og:title" content="Artı Eksi · Öğretmenler için sınıf ve öğrenci takibi">
+<meta property="og:description" content="Artı verin, eksi verin, gerisini uygulama biriktirsin. Çevrimdışı çalışır, veriniz cihazınızda kalır.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='49.5' fill='%23FFFFFF'/><path d='M50 2 a48 48 0 0 1 0 96 a24 24 0 0 1 0-48 a24 24 0 0 0 0-48' fill='%2346178F'/><rect x='39.5' y='24' width='21' height='4.6' rx='1.2' fill='%2346178F'/><rect x='47.7' y='15.8' width='4.6' height='21' rx='1.2' fill='%2346178F'/><rect x='39.5' y='72' width='21' height='4' rx='1.2' fill='%23FFFFFF'/><circle cx='50' cy='50' r='48' fill='none' stroke='%2346178F' stroke-width='3'/></svg>">
+<style>
+  :root {
+    --mor: #46178F;
+    --mor-koyu: #7C3AED;
+    --mor-hover: #3A1278;
+    --mor-yumusak: #EDE9FE;
+    --ikincil: #5B21B6;
+    --arti: #15803D;
+    --eksi: #B91C1C;
+
+    --zemin: #FFFFFF;
+    --kart: #FFFFFF;
+    --yuzey: #FAFAFA;
+    --yazi: #111827;
+    --yazi-ikincil: #4B5563;
+    --silik: #6B7280;
+    --kenarlik: #C4B5FD;
+    --ayirici: #DDD6FE;
+
+    --vurgu: var(--mor);
+    --hero-1: #46178F;
+    --hero-2: #7C3AED;
+    --golge: 0 1px 2px rgba(17, 24, 39, .04), 0 10px 28px rgba(70, 23, 143, .07);
+    --golge-guclu: 0 2px 6px rgba(17, 24, 39, .06), 0 18px 44px rgba(70, 23, 143, .12);
+    --logo-mor: #46178F;
+    --logo-acik: #FFFFFF;
+    --r: 16px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --zemin: #09090B;
+      --kart: #18181B;
+      --yuzey: #131316;
+      --yazi: #F3F4F6;
+      --yazi-ikincil: #A1A1AA;
+      --silik: #71717A;
+      --kenarlik: #5B21B6;
+      --ayirici: #4C1D95;
+      --mor-yumusak: #211A3D;
+      --arti: #4ADE80;
+      --eksi: #F87171;
+      --vurgu: var(--mor-koyu);
+      --hero-1: #2A0E58;
+      --hero-2: #5B21B6;
+      --golge: 0 1px 2px rgba(0, 0, 0, .55), 0 10px 30px rgba(0, 0, 0, .40);
+      --golge-guclu: 0 2px 8px rgba(0, 0, 0, .6), 0 20px 46px rgba(0, 0, 0, .5);
+      --logo-mor: #7C3AED;
+      --logo-acik: #F3F4F6;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation: none !important; transition: none !important; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--zemin);
+    color: var(--yazi);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    overflow-wrap: break-word;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: var(--vurgu); text-underline-offset: 3px; overflow-wrap: break-word; }
+  a:hover { color: var(--mor-koyu); }
+
+  .atla {
+    position: absolute; left: -9999px; top: 0;
+    background: var(--mor); color: #fff; padding: 10px 16px; border-radius: 0 0 12px 0; z-index: 50;
+  }
+  .atla:focus { left: 0; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--hero-1) 0%, var(--hero-2) 100%);
+    color: #fff;
+    padding: 72px 20px 84px;
+    isolation: isolate;
+  }
+  .hero-motif {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    z-index: -1; pointer-events: none;
+  }
+  .hero-ic { max-width: 780px; margin: 0 auto; text-align: center; }
+  .amblem {
+    width: 104px; height: 104px;
+    margin: 0 auto 26px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    background: var(--logo-acik);
+    border: 1px solid rgba(255, 255, 255, .6);
+    box-shadow: 0 12px 34px rgba(14, 4, 34, .32);
+  }
+  .amblem svg { width: 78px; height: 78px; display: block; }
+  .hero h1 {
+    margin: 0 0 14px;
+    font-size: clamp(2rem, 6.2vw, 3.15rem);
+    line-height: 1.14;
+    letter-spacing: -.022em;
+    font-weight: 800;
+  }
+  .hero p {
+    margin: 0 auto 26px;
+    font-size: clamp(1.02rem, 2.6vw, 1.2rem);
+    color: rgba(255, 255, 255, .88);
+    max-width: 60ch;
+  }
+  .rozetler { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .rozet {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 7px 15px 7px 12px;
+    border: 1px solid rgba(255, 255, 255, .34);
+    background: rgba(255, 255, 255, .12);
+    border-radius: 999px;
+    font-size: .88rem; font-weight: 600; letter-spacing: .01em;
+    color: #fff;
+    backdrop-filter: blur(6px);
+  }
+  .rozet svg { width: 15px; height: 15px; flex: none; }
+
+  /* ---------- Yerleşim ---------- */
+  .kabuk {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 20px 64px;
+  }
+
+  /* ---------- İçindekiler ---------- */
+  .toc {
+    position: sticky; top: 0; z-index: 20;
+    margin: 0 -20px 26px;
+    padding: 10px 20px;
+    background: color-mix(in srgb, var(--zemin) 88%, transparent);
+    border-bottom: 1px solid var(--ayirici);
+    backdrop-filter: blur(10px);
+  }
+  .toc-baslik { display: none; }
+  .toc ol {
+    display: flex; gap: 6px; margin: 0; padding: 0; list-style: none;
+    overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .toc ol::-webkit-scrollbar { display: none; }
+  .toc a {
+    display: block; white-space: nowrap;
+    padding: 6px 13px; border-radius: 999px;
+    font-size: .86rem; font-weight: 600; text-decoration: none;
+    color: var(--yazi-ikincil);
+    border: 1px solid transparent;
+  }
+  .toc a:hover { background: var(--mor-yumusak); color: var(--vurgu); }
+  .toc a.etkin {
+    background: var(--mor-yumusak);
+    color: var(--vurgu);
+    border-color: var(--kenarlik);
+  }
+
+  main { max-width: 68ch; }
+
+  @media (min-width: 1000px) {
+    .kabuk {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 250px;
+      gap: 52px;
+      align-items: start;
+      padding-top: 48px;
+    }
+    main { grid-column: 1; margin: 0; }
+    .toc {
+      grid-column: 2; grid-row: 1;
+      position: sticky; top: 32px;
+      margin: 0; padding: 20px 18px;
+      background: var(--kart);
+      border: 1px solid var(--ayirici);
+      border-radius: var(--r);
+      box-shadow: var(--golge);
+      backdrop-filter: none;
+    }
+    .toc-baslik {
+      display: block;
+      font-size: .74rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+      color: var(--silik); margin: 0 0 12px 4px;
+    }
+    .toc ol { flex-direction: column; gap: 2px; overflow: visible; max-height: 70vh; overflow-y: auto; }
+    .toc a { white-space: normal; border-radius: 9px; padding: 6px 10px; }
+  }
+
+  /* ---------- Bölümler ---------- */
+  section { scroll-margin-top: 96px; margin: 0 0 44px; }
+  section > h2 {
+    display: flex; align-items: baseline; gap: 12px;
+    font-size: clamp(1.28rem, 3.4vw, 1.62rem);
+    line-height: 1.3; letter-spacing: -.015em; font-weight: 750;
+    margin: 0 0 14px;
+  }
+  section > h2 .no {
+    flex: none;
+    font-size: .78rem; font-weight: 700; letter-spacing: .04em;
+    color: var(--vurgu);
+    background: var(--mor-yumusak);
+    border: 1px solid var(--kenarlik);
+    border-radius: 8px;
+    padding: 2px 8px;
+    line-height: 1.5;
+  }
+  h3 { font-size: 1.02rem; font-weight: 700; margin: 26px 0 8px; letter-spacing: -.005em; }
+  p { margin: 0 0 14px; color: var(--yazi-ikincil); }
+  main strong { color: var(--yazi); font-weight: 650; }
+  ul { margin: 0 0 16px; padding-left: 1.25em; color: var(--yazi-ikincil); }
+  li { margin-bottom: 8px; }
+  li::marker { color: var(--vurgu); }
+
+  .kart {
+    background: var(--kart);
+    border: 1px solid var(--ayirici);
+    border-radius: var(--r);
+    padding: 20px 22px;
+    box-shadow: var(--golge);
+    margin: 0 0 18px;
+  }
+  .kart > :last-child { margin-bottom: 0; }
+
+  .not {
+    border-left: 3px solid var(--vurgu);
+    background: var(--yuzey);
+    border-radius: 0 12px 12px 0;
+    padding: 14px 18px;
+    margin: 0 0 18px;
+    font-size: .95rem;
+  }
+  .not > :last-child { margin-bottom: 0; }
+  .not.uyari { border-left-color: var(--eksi); }
+  .not.olumlu { border-left-color: var(--arti); }
+  .not b { color: var(--yazi); }
+
+  /* ---------- Kısaca kartları ---------- */
+  .ozet {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+    gap: 14px;
+    margin: 0 0 8px;
+  }
+  .ozet-kart {
+    position: relative;
+    background: var(--kart);
+    border: 1px solid var(--ayirici);
+    border-radius: 18px;
+    padding: 20px 18px 18px;
+    box-shadow: var(--golge);
+    overflow: hidden;
+  }
+  .ozet-kart::after {
+    content: ""; position: absolute; inset: 0 0 auto 0; height: 3px;
+    background: linear-gradient(90deg, var(--mor), var(--mor-koyu));
+    opacity: .85;
+  }
+  .ozet-kart .ikon {
+    width: 40px; height: 40px; border-radius: 12px;
+    display: grid; place-items: center;
+    background: var(--mor-yumusak);
+    border: 1px solid var(--kenarlik);
+    margin-bottom: 12px;
+  }
+  .ozet-kart .ikon svg { width: 21px; height: 21px; stroke: var(--vurgu); }
+  .ozet-kart h3 { margin: 0 0 5px; font-size: 1rem; }
+  .ozet-kart p { margin: 0; font-size: .91rem; line-height: 1.6; }
+
+  /* ---------- Tablo ---------- */
+  .tablo-sar {
+    border: 1px solid var(--ayirici);
+    border-radius: var(--r);
+    background: var(--kart);
+    box-shadow: var(--golge);
+    overflow: hidden;
+    margin: 0 0 12px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+    font-size: .88rem;
+  }
+  caption { caption-side: bottom; padding: 10px 16px; font-size: .82rem; color: var(--silik); text-align: left; }
+  th, td {
+    padding: 12px 14px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--ayirici);
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  thead th {
+    background: var(--mor-yumusak);
+    color: var(--vurgu);
+    font-size: .74rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    border-bottom: 1px solid var(--kenarlik);
+  }
+  tbody th { font-weight: 650; color: var(--yazi); }
+  tbody td { color: var(--yazi-ikincil); }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+  tbody tr:nth-child(even) { background: var(--yuzey); }
+  th .etiket, td .etiket { white-space: normal; display: inline-block; border-radius: 10px; }
+
+  /* Dar ekran: tabloyu yigilmis kart duzenine cevir */
+  @media (max-width: 720px) {
+    .tablo-sar {
+      border: 0; background: none; box-shadow: none; border-radius: 0; overflow: visible;
+      margin-bottom: 4px;
+    }
+    table, tbody, tr, th, td { display: block; width: auto; }
+    table { table-layout: auto; font-size: .93rem; }
+    thead { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); }
+    caption { display: none; }
+    tbody tr, tbody tr:nth-child(even) {
+      background: var(--kart);
+      border: 1px solid var(--ayirici);
+      border-radius: 14px;
+      box-shadow: var(--golge);
+      padding: 2px 16px 10px;
+      margin: 0 0 14px;
+    }
+    tbody th, tbody td { padding: 12px 0; border-bottom: 1px solid var(--ayirici); }
+    tbody th { font-size: 1rem; padding-top: 14px; }
+    tbody tr:last-child th, tbody tr:last-child td { border-bottom: 1px solid var(--ayirici); }
+    tbody tr > td:last-child, tbody tr:last-child > td:last-child { border-bottom: 0; }
+    tbody td::before {
+      content: attr(data-etiket);
+      display: block;
+      margin-bottom: 3px;
+      font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--silik);
+    }
+  }
+
+  /* ---------- Etiketler ---------- */
+  .etiket {
+    display: inline-block;
+    font-size: .74rem; font-weight: 700; letter-spacing: .03em;
+    padding: 2px 9px; border-radius: 999px;
+    border: 1px solid currentColor;
+    white-space: nowrap;
+  }
+  .etiket.yesil { color: var(--arti); }
+  .etiket.kirmizi { color: var(--eksi); }
+  .etiket.mor { color: var(--vurgu); }
+
+  /* E-posta maskeleme + kopyala */
+  .eposta-satir { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .dugme {
+    font: inherit; font-size: .92rem; font-weight: 650; line-height: 1.4;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 18px; border-radius: 999px;
+    text-decoration: none; cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .dugme svg { width: 16px; height: 16px; flex: none; }
+  .dugme-birincil { background: var(--vurgu); color: #FFFFFF; border-color: var(--vurgu); }
+  .dugme-birincil:hover { background: var(--mor-hover); color: #FFFFFF; border-color: var(--mor-hover); }
+  .dugme-ikincil { background: var(--mor-yumusak); color: var(--vurgu); border-color: var(--kenarlik); }
+  .dugme-ikincil:hover { background: var(--kart); color: var(--vurgu); }
+  .dugme:focus-visible { outline: 2px solid var(--vurgu); outline-offset: 3px; }
+  .eposta-durum { font-size: .85rem; font-weight: 650; color: var(--arti); }
+  .eposta-aciklama { font-size: .85rem; color: var(--silik); margin-bottom: 0; }
+  .yanit-suresi {
+    background: var(--yuzey);
+    border: 1px dashed var(--kenarlik);
+    border-radius: 12px;
+    padding: 12px 16px;
+  }
+  footer .eposta-gonder { color: var(--silik); text-decoration: underline; }
+  footer .eposta-gonder:hover { color: var(--vurgu); }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: .88em;
+    background: var(--mor-yumusak);
+    border: 1px solid var(--ayirici);
+    border-radius: 6px;
+    padding: 1px 6px;
+    overflow-wrap: break-word;
+  }
+
+  .haklar { list-style: none; padding: 0; }
+  .haklar li {
+    padding-left: 30px; position: relative; margin-bottom: 12px;
+  }
+  .haklar li::before {
+    content: ""; position: absolute; left: 0; top: .55em;
+    width: 14px; height: 3px; border-radius: 2px; background: var(--vurgu);
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--ayirici);
+    background: var(--yuzey);
+    padding: 28px 20px 40px;
+    text-align: center;
+  }
+  footer .ic {
+    max-width: 1120px; margin: 0 auto;
+    color: var(--silik); font-size: .87rem;
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; flex-wrap: wrap;
+  }
+  footer .ic svg { width: 22px; height: 22px; flex: none; }
+
+  @media (max-width: 420px) {
+    body { font-size: 16px; }
+    .kart { padding: 18px 16px; }
+  }
+</style><style>
+  /* ---------- Tanıtım sayfasına özel ---------- */
+  .hero .cta { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin:26px 0 22px; }
+  .dugme-hero {
+    font:inherit; font-size:.97rem; font-weight:700; line-height:1.4;
+    display:inline-flex; align-items:center; gap:9px;
+    padding:12px 24px; border-radius:999px; text-decoration:none;
+    background:#fff; color:var(--mor); border:1px solid #fff;
+  }
+  .dugme-hero:hover { background:rgba(255,255,255,.9); color:var(--mor); }
+  .dugme-hero.hayalet { background:rgba(255,255,255,.12); color:#fff; border-color:rgba(255,255,255,.45); backdrop-filter:blur(6px); }
+  .dugme-hero.hayalet:hover { background:rgba(255,255,255,.2); color:#fff; }
+  .dugme-hero svg { width:17px; height:17px; flex:none; }
+
+  main { max-width: 72ch; }
+  .giris-cumle { font-size:1.06rem; color:var(--yazi); }
+
+  .isaretler { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin:0 0 18px; }
+  .isaret {
+    background:var(--kart); border:1px solid var(--ayirici); border-radius:18px;
+    padding:18px; box-shadow:var(--golge); text-align:center;
+  }
+  .isaret .yuvarlak {
+    width:52px; height:52px; margin:0 auto 12px; border-radius:50%;
+    display:grid; place-items:center; font-size:1.5rem; font-weight:800; line-height:1;
+    border:2px solid currentColor;
+  }
+  .isaret.i-arti .yuvarlak { color:var(--arti); background:color-mix(in srgb, var(--arti) 10%, transparent); }
+  .isaret.i-eksi .yuvarlak { color:var(--eksi); background:color-mix(in srgb, var(--eksi) 10%, transparent); }
+  .isaret.i-pas .yuvarlak { color:var(--silik); background:var(--yuzey); }
+  .isaret h3 { margin:0 0 5px; font-size:1rem; }
+  .isaret p { margin:0; font-size:.9rem; }
+
+  .adimlar { list-style:none; padding:0; margin:0 0 18px; counter-reset:adim; }
+  .adimlar li {
+    position:relative; padding-left:46px; margin-bottom:16px; counter-increment:adim;
+    color:var(--yazi-ikincil);
+  }
+  .adimlar li::before {
+    content:counter(adim); position:absolute; left:0; top:-1px;
+    width:30px; height:30px; border-radius:10px; display:grid; place-items:center;
+    font-size:.85rem; font-weight:700; color:var(--vurgu);
+    background:var(--mor-yumusak); border:1px solid var(--kenarlik);
+  }
+  .adimlar li b { color:var(--yazi); }
+
+  .satirlar { list-style:none; padding:0; margin:0 0 18px; }
+  .satirlar li {
+    display:flex; gap:12px; align-items:flex-start;
+    padding:13px 0; border-bottom:1px solid var(--ayirici);
+    color:var(--yazi-ikincil); margin:0;
+  }
+  .satirlar li:last-child { border-bottom:0; }
+  .satirlar svg { width:19px; height:19px; flex:none; stroke:var(--vurgu); margin-top:3px; }
+  .satirlar b { color:var(--yazi); font-weight:650; }
+
+  .kapanis {
+    background:linear-gradient(135deg, var(--hero-1) 0%, var(--hero-2) 100%);
+    color:#fff; border-radius:22px; padding:34px 28px; text-align:center;
+    box-shadow:var(--golge-guclu);
+  }
+  .kapanis h2 { display:block; color:#fff; margin:0 0 10px; font-size:clamp(1.3rem,3.6vw,1.7rem); }
+  .kapanis p { color:rgba(255,255,255,.9); margin:0 auto 20px; max-width:52ch; }
+
+  /* ---------- Canlı deneme kartı ---------- */
+  .deneme { margin: 0 0 18px; }
+  .dkart {
+    background: var(--kart);
+    border: 1px solid var(--ayirici);
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: var(--golge);
+  }
+  .dust { display: flex; align-items: center; gap: 14px; }
+  .davatar {
+    width: 58px; height: 58px; flex: none; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--mor-yumusak); border: 2px solid var(--kenarlik);
+    color: var(--vurgu); font-weight: 800; font-size: 1.15rem; letter-spacing: .02em;
+  }
+  .dkimlik { flex: 1 1 auto; min-width: 0; }
+  .dad { font-weight: 750; font-size: 1.12rem; color: var(--yazi); line-height: 1.3; }
+  .dalt { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-top: 4px; }
+  .dno { font-size: .86rem; color: var(--silik); }
+  .ddurum {
+    font-size: .78rem; font-weight: 700; padding: 3px 11px; border-radius: 999px;
+    background: var(--yuzey); border: 1px solid var(--ayirici); color: var(--silik);
+  }
+  .ddurum.artida { color: var(--arti); border-color: currentColor; background: color-mix(in srgb, var(--arti) 9%, transparent); }
+  .ddurum.eksida { color: var(--eksi); border-color: currentColor; background: color-mix(in srgb, var(--eksi) 9%, transparent); }
+  .dnet {
+    flex: none; text-align: center; min-width: 66px;
+    background: var(--yuzey); border: 1px solid var(--ayirici); border-radius: 14px;
+    padding: 8px 10px;
+  }
+  .dnet b { display: block; font-size: 1.25rem; line-height: 1.15; color: var(--yazi); font-variant-numeric: tabular-nums; }
+  .dnet.pozitif b { color: var(--arti); }
+  .dnet.negatif b { color: var(--eksi); }
+  .dnet span { font-size: .74rem; color: var(--silik); letter-spacing: .04em; }
+
+  .dsayaclar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0 14px; }
+  .dsayac {
+    border-radius: 14px; padding: 10px 12px;
+    background: var(--yuzey); border: 1px solid var(--ayirici);
+  }
+  .dsayac i { font-style: normal; display: block; font-size: .78rem; color: var(--silik); }
+  .dsayac b { font-size: 1.1rem; font-variant-numeric: tabular-nums; color: var(--yazi); }
+  .dsayac.s-arti { background: color-mix(in srgb, var(--arti) 8%, transparent); border-color: color-mix(in srgb, var(--arti) 30%, transparent); }
+  .dsayac.s-arti b { color: var(--arti); }
+  .dsayac.s-eksi { background: color-mix(in srgb, var(--eksi) 8%, transparent); border-color: color-mix(in srgb, var(--eksi) 30%, transparent); }
+  .dsayac.s-eksi b { color: var(--eksi); }
+
+  .dtuslar { display: flex; gap: 10px; }
+  .dtus {
+    flex: 1 1 0; font: inherit; cursor: pointer;
+    display: grid; place-items: center; gap: 3px;
+    padding: 12px 6px; border-radius: 16px;
+    border: 1px solid var(--ayirici); background: var(--yuzey); color: var(--yazi-ikincil);
+    font-size: .8rem; font-weight: 650;
+    transition: transform .12s ease, background .16s ease;
+  }
+  .dtus svg { width: 22px; height: 22px; }
+  .dtus:hover { background: var(--kart); }
+  .dtus:active { transform: scale(.96); }
+  .dtus:focus-visible { outline: 2px solid var(--vurgu); outline-offset: 2px; }
+  .dtus.t-arti { color: var(--arti); background: color-mix(in srgb, var(--arti) 10%, transparent); border-color: color-mix(in srgb, var(--arti) 34%, transparent); }
+  .dtus.t-eksi { color: var(--eksi); background: color-mix(in srgb, var(--eksi) 10%, transparent); border-color: color-mix(in srgb, var(--eksi) 34%, transparent); }
+  .dtus.vuruldu { animation: dvurus .42s ease; }
+  @keyframes dvurus {
+    0% { transform: scale(1); }
+    38% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+
+  .dalt-cubuk {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap; margin-top: 14px;
+  }
+  .dmesaj { font-size: .88rem; color: var(--silik); min-height: 1.5em; }
+  .dmesaj b { color: var(--yazi); }
+  .darac { display: flex; gap: 8px; flex: none; }
+  .darac button {
+    font: inherit; font-size: .84rem; font-weight: 650; cursor: pointer;
+    padding: 7px 15px; border-radius: 999px;
+    border: 1px solid var(--kenarlik); background: var(--mor-yumusak); color: var(--vurgu);
+  }
+  .darac button:hover { background: var(--kart); }
+  .darac button:disabled { opacity: .5; cursor: default; }
+  .darac button:focus-visible { outline: 2px solid var(--vurgu); outline-offset: 2px; }
+
+  @media (max-width: 430px) {
+    .dsayaclar { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .dsayac { padding: 9px 9px; }
+    .dnet { min-width: 58px; }
+  }
+
+  /* ---------- Ekran görüntüsü galerisi ---------- */
+  .galeri { margin: 26px 0 6px; }
+  .galeri-ust {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 12px; margin-bottom: 12px;
+  }
+  .galeri-ust h3 { margin: 0; }
+  .galeri-ipucu { font-size: .8rem; color: var(--silik); }
+  .serit {
+    display: flex; gap: 16px;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    padding: 4px 20px 16px; margin: 0 -20px;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .serit::-webkit-scrollbar { display: none; }
+  .kare {
+    flex: 0 0 auto; width: 168px; scroll-snap-align: center;
+    background: none; border: 0; padding: 0; margin: 0;
+    font: inherit; text-align: left; cursor: zoom-in;
+  }
+  .kare .cerceve {
+    border-radius: 20px; overflow: hidden;
+    border: 1px solid var(--ayirici);
+    background: var(--kart);
+    box-shadow: var(--golge);
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .kare:hover .cerceve { transform: translateY(-3px); box-shadow: var(--golge-guclu); }
+  .kare:focus-visible .cerceve { outline: 2px solid var(--vurgu); outline-offset: 3px; }
+  .kare img { display: block; width: 100%; height: auto; }
+  .kare figcaption {
+    margin-top: 9px; font-size: .82rem; line-height: 1.45;
+    color: var(--yazi-ikincil);
+  }
+  .kare figcaption b { display: block; color: var(--yazi); font-weight: 650; font-size: .86rem; }
+
+  /* Büyütme katmanı */
+  .buyutec {
+    position: fixed; inset: 0; z-index: 60;
+    display: none; place-items: center;
+    background: rgba(9, 5, 20, .82);
+    backdrop-filter: blur(6px);
+    padding: 24px 16px;
+  }
+  .buyutec[open] { display: grid; }
+  .buyutec figure { margin: 0; display: grid; justify-items: center; gap: 14px; max-height: 100%; }
+  .buyutec img {
+    max-height: 76vh; max-width: min(92vw, 380px);
+    border-radius: 22px; border: 1px solid rgba(255,255,255,.16);
+    box-shadow: 0 24px 60px rgba(0,0,0,.5);
+  }
+  .buyutec figcaption { color: rgba(255,255,255,.9); font-size: .92rem; text-align: center; max-width: 42ch; }
+  .buyutec figcaption b { display: block; color: #fff; font-weight: 700; margin-bottom: 2px; }
+  .bt-kapat, .bt-ok {
+    position: absolute; border: 1px solid rgba(255,255,255,.28);
+    background: rgba(255,255,255,.12); color: #fff;
+    width: 42px; height: 42px; border-radius: 50%;
+    display: grid; place-items: center; cursor: pointer;
+    font: inherit;
+  }
+  .bt-kapat:hover, .bt-ok:hover { background: rgba(255,255,255,.24); }
+  .bt-kapat { top: 18px; right: 18px; }
+  .bt-ok.geri { left: 14px; top: 50%; transform: translateY(-50%); }
+  .bt-ok.ileri { right: 14px; top: 50%; transform: translateY(-50%); }
+  .bt-kapat svg, .bt-ok svg { width: 19px; height: 19px; }
+  .bt-sayac { position: absolute; bottom: 18px; left: 0; right: 0; text-align: center; color: rgba(255,255,255,.65); font-size: .82rem; }
+
+  @media (min-width: 700px) {
+    .kare { width: 190px; }
+  }
+
+  footer .ic a { color:var(--silik); text-decoration:underline; }
+  footer .ic a:hover { color:var(--vurgu); }
+</style>
+</head>
+<body>
+
+<a class="atla" href="#ozet">İçeriğe atla</a>
+
+<header class="hero">
+<svg class="hero-motif" aria-hidden="true" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <radialGradient id="aura1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#C4B5FD" stop-opacity=".38"/>
+        <stop offset="100%" stop-color="#C4B5FD" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="aura2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#EDE9FE" stop-opacity=".26"/>
+        <stop offset="100%" stop-color="#EDE9FE" stop-opacity="0"/>
+      </radialGradient>
+      <g id="motif-arti">
+        <path d="M-11 0H11M0 -11V11" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </g>
+      <g id="motif-eksi">
+        <path d="M-11 0H11" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </g>
+    </defs>
+    <circle cx="965" cy="120" r="330" fill="url(#aura1)"/>
+    <circle cx="180" cy="470" r="290" fill="url(#aura2)"/>
+    <g opacity=".16">
+      <use href="#motif-arti" x="1055" y="88"/>
+      <use href="#motif-eksi" x="1128" y="176"/>
+      <use href="#motif-arti" x="990" y="228"/>
+      <use href="#motif-eksi" x="1092" y="300"/>
+      <use href="#motif-arti" x="1150" y="392"/>
+      <use href="#motif-eksi" x="1010" y="418"/>
+      <use href="#motif-arti" x="86" y="378"/>
+      <use href="#motif-eksi" x="164" y="452"/>
+      <use href="#motif-arti" x="252" y="330"/>
+    </g>
+  </svg>  <div class="hero-ic">
+    <div class="amblem">
+      <svg viewBox="0 0 100 100" role="img" aria-label="Artı Eksi logosu">
+        <circle cx="50" cy="50" r="49.5" fill="var(--logo-acik)"/>
+        <path d="M50 2 a48 48 0 0 1 0 96 a24 24 0 0 1 0-48 a24 24 0 0 0 0-48" fill="var(--logo-mor)"/>
+        <rect x="39.5" y="24" width="21" height="4.6" rx="1.2" fill="var(--logo-mor)"/>
+        <rect x="47.7" y="15.8" width="4.6" height="21" rx="1.2" fill="var(--logo-mor)"/>
+        <rect x="39.5" y="72" width="21" height="4" rx="1.2" fill="var(--logo-acik)"/>
+        <circle cx="50" cy="50" r="48" fill="none" stroke="var(--logo-mor)" stroke-width="3"/>
+      </svg>
+    </div>
+
+    <h1>Artı Eksi Uygulaması: Sınıfınızı Takip Etmek Artık Çok Kolay!</h1>
+    <p>Artı Eksi; öğretmenlerin davranış puanını, ödevleri, projeleri, ajandayı ve birebir derslerini tek uygulamada topladığı bir çalışma defteridir. Çevrimdışı çalışır, verisi cihazınızda kalır.</p>
+    <div class="cta">
+      <a class="dugme-hero" href="#ozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.2 2.4 2.4 4.6-4.9"/></svg>Neler yapabilir</a>
+      <a class="dugme-hero hayalet" href="https://dalgali.github.io/arti-eksi-gizlilik/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Gizlilik politikası</a>
+    </div>
+    <div class="rozetler">
+      <span class="rozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1"/></svg>İnternet gerekmez</span>
+      <span class="rozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Sunucu yok</span>
+      <span class="rozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18.5h2"/></svg>Veriler cihazda kalır</span>
+      <span class="rozet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 5.6a5.5 5.5 0 0 0-7.8 0L12 6.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l8.8 8.7 8.8-8.7a5.5 5.5 0 0 0 0-7.8z"/></svg>Reklamsız</span>
+    </div>
+  </div>
+</header>
+
+<div class="kabuk">
+
+  <aside class="toc" aria-label="Sayfa içeriği">
+    <p class="toc-baslik">İçindekiler</p>
+    <ol>
+      <li><a href="#ozet">1 · Kısaca</a></li>
+      <li><a href="#puan">2 · Artı, eksi, pas</a></li>
+      <li><a href="#kurulum">3 · Kurulum</a></li>
+      <li><a href="#moduller">4 · Bölümler</a></li>
+      <li><a href="#kucuk">5 · Küçük kolaylıklar</a></li>
+      <li><a href="#paylasim">6 · Sınıf paylaşımı</a></li>
+      <li><a href="#yedek">7 · Yedekleme</a></li>
+      <li><a href="#gizlilik">8 · Gizlilik</a></li>
+      <li><a href="#kimler">9 · Kimler için</a></li>
+      <li><a href="#iletisim">10 · İletişim</a></li>
+    </ol>
+  </aside>
+
+  <main>
+
+    <section id="ozet">
+      <h2><span class="no">01</span> Sınıfın günlük hâli, tek yerde</h2>
+      <p class="giris-cumle">Artı Eksi, öğretmenin gün içinde kafasında tuttuğu şeyleri kayda geçirir: kim bugün derse hazırdı, kim ödevini getirmedi, hangi öğrenci son iki haftada toparlandı. Siz puan verirsiniz, gerisini uygulama biriktirir, dönem sonunda karne ve rapor kendiliğinden çıkar.</p>
+      <div class="ozet">
+        <div class="ozet-kart"><div class="ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1"/></svg></div><h3>Çevrimdışı çalışır</h3><p>Sınıfta internet yoksa da her şey çalışır. Kaydettiğiniz her şey önce kendi cihazınıza yazılır.</p></div>
+        <div class="ozet-kart"><div class="ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><h3>Sunucumuz yok</h3><p>Öğrenci verisi bize ulaşmaz. Kayıtlar sizin cihazınızda, yedeğiniz sizin iCloud hesabınızda durur.</p></div>
+        <div class="ozet-kart"><div class="ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 5.6a5.5 5.5 0 0 0-7.8 0L12 6.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l8.8 8.7 8.8-8.7a5.5 5.5 0 0 0 0-7.8z"/></svg></div><h3>Reklam yok</h3><p>Reklam, analitik izleme ve üçüncü taraf takip kodu bulunmaz.</p></div>
+        <div class="ozet-kart"><div class="ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18.5h2"/></svg></div><h3>iPhone ve Android</h3><p>Aynı uygulama iki platformda. Yedek dosyasıyla cihazlar arasında taşıyabilirsiniz.</p></div>
+      </div>
+      <div class="not olumlu" style="margin-top:18px">
+        <p style="margin-bottom:0"><b>Gizlilik politikasını mı arıyorsunuz?</b> Uygulamanın hangi veriyi işlediği, verinin nerede durduğu ve nasıl silineceği ayrı bir sayfada tek tek anlatılıyor: <a href="https://dalgali.github.io/arti-eksi-gizlilik/">Artı Eksi Gizlilik Politikası</a>, veri silme adımları için <a href="https://dalgali.github.io/arti-eksi-gizlilik/#silme">10. bölüme</a> gidebilirsiniz.</p>
+      </div>
+    </section>
+
+    <section id="puan">
+      <h2><span class="no">02</span> Artı, eksi ve pas</h2>
+      <p>Uygulamanın çekirdeği üç işaret. Öğrenciye dokunup işareti seçersiniz, kayıt anında düşer, not defterine yazmak ya da akşam temize çekmek yok.</p>
+      <div class="isaretler">
+        <div class="isaret i-arti"><div class="yuvarlak">+</div><h3>Artı</h3><p>Beklenen davranış gerçekleşti: ödevini yaptı, derse katıldı, arkadaşına yardım etti.</p></div>
+        <div class="isaret i-eksi"><div class="yuvarlak">−</div><h3>Eksi</h3><p>Beklenen davranış gerçekleşmedi. Ceza değil, tekrar eden bir örüntüyü görünür kılan bir işaret.</p></div>
+        <div class="isaret i-pas"><div class="yuvarlak"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" style="width:22px;height:22px"><path d="M9 6v12M15 6v12"/></svg></div><h3>Pas</h3><p>Bugün geçiyoruz. Mazeret kabul edildi, kayıt tutulur ama puana yansımaz.</p></div>
+      </div>
+      <div class="deneme">
+        <div class="dkart" id="dkart">
+          <div class="dust">
+            <div class="davatar" aria-hidden="true">CS</div>
+            <div class="dkimlik">
+              <div class="dad">Cahit Sıtkı</div>
+              <div class="dalt">
+                <span class="dno">No. 35</span>
+                <span class="ddurum" id="d-durum">Sıfır</span>
+              </div>
+            </div>
+            <div class="dnet" id="d-net-kutu">
+              <b id="d-net">0</b>
+              <span>net</span>
+            </div>
+          </div>
+
+          <div class="dsayaclar">
+            <div class="dsayac s-arti"><i>Artı</i><b id="d-arti">0</b></div>
+            <div class="dsayac s-eksi"><i>Eksi</i><b id="d-eksi">0</b></div>
+            <div class="dsayac"><i>Pas</i><b id="d-pas">0</b></div>
+          </div>
+
+          <div class="dtuslar">
+            <button type="button" class="dtus t-eksi" data-isaret="eksi" aria-label="Eksi ver">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg>
+              Eksi
+            </button>
+            <button type="button" class="dtus t-pas" data-isaret="pas" aria-label="Pas geç">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>
+              Pas
+            </button>
+            <button type="button" class="dtus t-arti" data-isaret="arti" aria-label="Artı ver">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg>
+              Artı
+            </button>
+          </div>
+
+          <div class="dalt-cubuk">
+            <p class="dmesaj" id="d-mesaj" role="status" aria-live="polite">Düğmelere dokunun, kart anında güncellenir.</p>
+            <div class="darac">
+              <button type="button" id="d-oynat">Oynat</button>
+              <button type="button" id="d-sifirla">Sıfırla</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>Kriterleri kendiniz belirlersiniz. Hazır gelen listeyi kullanabilir, kendi sınıfınıza göre ekleyip çıkarabilirsiniz. Tek öğrenciye ya da tüm sınıfa aynı anda puan verebilirsiniz.</p>
+      <div class="not olumlu">
+        <p><b>Yanlış dokunuş sorun değil:</b> Verilen puan geri alınabilir, sıfırlama işleminin bile dönüşü vardır. Öğrenci silmek, arşive almak, geri getirmek, hepsi geri alınabilir.</p>
+      </div>
+    </section>
+
+    <section id="kurulum">
+      <h2><span class="no">03</span> Beş dakikada kurulum</h2>
+      <p>Uygulamayı ilk açtığınızda sizi adım adım bir sihirbaz karşılar. Sınıf listesini elle yazmak zorunda değilsiniz.</p>
+      <ol class="adimlar">
+        <li><b>Öğretmen türünüzü seçin.</b> Sınıf öğretmeni misiniz, branş öğretmeni mi, uygulama buna göre kendini ayarlar. İlkokul, ortaokul ve lise farklı davranır.</li>
+        <li><b>Sınıflarınızı oluşturun.</b> 5/A gibi bir ad, bir renk, dersler. Ders programınızı doldurursanız anasayfa o günkü dersinizi kendisi getirir.</li>
+        <li><b>Öğrencileri ekleyin.</b> Tek tek yazabilir, e-Okul listesini yapıştırabilir, PDF yükleyebilir ya da listenin fotoğrafını çekebilirsiniz, uygulama isimleri okuyup ayıklar.</li>
+        <li><b>Kriterlerinizi gözden geçirin.</b> Hangi davranışa artı, hangisine eksi vereceğinizi başta bir kez ayarlarsınız, sonra hep hazır durur.</li>
+      </ol>
+    </section>
+
+    <section id="moduller">
+      <h2><span class="no">04</span> Günlük işin geri kalanı</h2>
+      <p>Puanlama tek başına yetmiyor. Uygulama, öğretmenin gün içinde uğradığı diğer işleri de içeri aldı, her biri istenirse kapatılabilen ayrı bir bölüm.</p>
+      <ul class="satirlar">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg><span><b>Ödevler</b> · Ödev verirsiniz, kimin yaptığını tek ekranda işaretlersiniz. Bitenler kendiliğinden arşive iner, veliyle paylaşmak isterseniz düzgün bir görsel çıkar.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H7a2.5 2.5 0 0 0-2.5 2.5v15A2.5 2.5 0 0 0 7 22h10a2.5 2.5 0 0 0 2.5-2.5V7.5z"/><path d="M14 2v5.5h5.5M8.5 13h7M8.5 17h4"/></svg><span><b>Proje Ödevi</b> · Uzun soluklu projeler için ayrı bölüm: aşamalar, kontrol listesi, teslim takibi ve rubrikle değerlendirme.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg><span><b>Birebir Ders</b> · Özel ders veren öğretmenler için ayrı bir dünya: öğrenci kaydı, haftalık program, deneme sonuçları, ödev takibi, ücret ve paket hesabı.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v16H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v4H6.5A2.5 2.5 0 0 1 4 20.5z"/></svg><span><b>İlk Okuma ve Yazma</b> · 1. sınıf öğretmenleri için ses grubu ve harf takibi. Puansız çalışır, her çocuğun hangi harfi öğrendiğini gösterir.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span><b>Ajanda ve ders programı</b> · Günlük not, hatırlatma ve haftalık program. Anasayfa o günün akışını çıkarır, MEB çalışma takvimi uygulamanın içinde gömülüdür.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span><b>Karne, rapor ve istatistik</b> · Davranış notu kademeye göre hesaplanır. Sınıf karnesi, öğrenci karşılaştırması, PDF ve Excel çıktısı hazırdır.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><span><b>Veli görüşmesi ve belgeler</b> · Öğrenci sözleşmesi, veli görüşme tutanağı, veli gelmedi kaydı, adım adım sihirbazla doldurulur ve belge olarak saklanır.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg><span><b>Rozetler ve devamlılık</b> · Öğrencilere rozet, size devamlılık serisi. Kazanılan rozet bir daha geri alınmaz.</span></li>
+      </ul>
+      <div class="galeri">
+        <div class="galeri-ust">
+          <h3>Uygulamadan görünümler</h3>
+          <span class="galeri-ipucu">Yana kaydırın, büyütmek için dokunun</span>
+        </div>
+        <div class="serit" id="serit">
+          <button type="button" class="kare" data-sira="0"><figure style="margin:0"><span class="cerceve"><img src="gorseller/01-IMG_6317.jpg" alt="Öğretmen türünü seçme ekranı" loading="lazy" width="900" height="1955"></span><figcaption><b>Kurulum size sorarak başlar</b>Sınıf öğretmeni mi, branş mı. Uygulama buna göre kurulur.</figcaption></figure></button>
+          <button type="button" class="kare" data-sira="1"><figure style="margin:0"><span class="cerceve"><img src="gorseller/02-IMG_6325.jpg" alt="Öğrenci listesi ekleme yöntemleri" loading="lazy" width="900" height="1955"></span><figcaption><b>Listeyi dört yoldan alın</b>e-Okul dosyası, başka öğretmenin QR kodu, kendi sınıfınız ya da elle.</figcaption></figure></button>
+          <button type="button" class="kare" data-sira="2"><figure style="margin:0"><span class="cerceve"><img src="gorseller/03-IMG_6326.jpg" alt="Sınıf öğrenci listesi ve puan kartları" loading="lazy" width="900" height="1955"></span><figcaption><b>Sınıf listesi</b>Her öğrenci bir kart, puan tek dokunuşla düşer.</figcaption></figure></button>
+          <button type="button" class="kare" data-sira="3"><figure style="margin:0"><span class="cerceve"><img src="gorseller/04-IMG_6333.jpg" alt="Artı kriterleri seçme ekranı" loading="lazy" width="900" height="1955"></span><figcaption><b>Artı kriterleri</b>Derse katılım, doğru cevap, güzel davranış. Hepsi hazır gelir!</figcaption></figure></button>
+          <button type="button" class="kare" data-sira="4"><figure style="margin:0"><span class="cerceve"><img src="gorseller/05-IMG_6334.jpg" alt="Eksi kriterleri seçme ekranı" loading="lazy" width="900" height="1955"></span><figcaption><b>Eksi kriterleri</b>Dersi bozma, gecikme, hazırlıksız gelme gibi başlıklar.</figcaption></figure></button>
+          <button type="button" class="kare" data-sira="5"><figure style="margin:0"><span class="cerceve"><img src="gorseller/06-IMG_6337.jpg" alt="Yeni kriter ekleme ekranı" loading="lazy" width="900" height="1955"></span><figcaption><b>Kendi kriterinizi ekleyin</b>Ad, davranış alanı, puan değeri ve otuz görsel arasından bir rozet.</figcaption></figure></button>
+          <button type="button" class="kare" data-sira="6"><figure style="margin:0"><span class="cerceve"><img src="gorseller/07-IMG_6327.jpg" alt="Öğrenci detay ekranı" loading="lazy" width="900" height="1955"></span><figcaption><b>Öğrencinin durumu</b>Artı, eksi, işlem sayısı, notlar ve puan geçmişi bir arada.</figcaption></figure></button>
+          <button type="button" class="kare" data-sira="7"><figure style="margin:0"><span class="cerceve"><img src="gorseller/08-IMG_6335.jpg" alt="Sınıf araçları menüsü" loading="lazy" width="900" height="1955"></span><figcaption><b>Sınıf araçları</b>Yoklama geçmişi, karşılaştırma, sıralama, veli mesajı, grup oluşturma.</figcaption></figure></button>
+          <button type="button" class="kare" data-sira="8"><figure style="margin:0"><span class="cerceve"><img src="gorseller/09-IMG_6329.jpg" alt="Ajanda takvimi" loading="lazy" width="900" height="1955"></span><figcaption><b>Ajanda</b>Notlar, ödevler, resmî tatiller ve okul tatilleri aynı takvimde.</figcaption></figure></button>
+          <button type="button" class="kare" data-sira="9"><figure style="margin:0"><span class="cerceve"><img src="gorseller/10-IMG_6331.jpg" alt="Ders programı gün kurulumu" loading="lazy" width="900" height="1955"></span><figcaption><b>Günü birlikte kuralım</b>İlk zil, ders sayısı, ders süresi ve öğle arası sorulur. Program kendiliğinden çıkar.</figcaption></figure></button>
+          <button type="button" class="kare" data-sira="10"><figure style="margin:0"><span class="cerceve"><img src="gorseller/11-IMG_6338.jpg" alt="Sınıf paylaşma seçenekleri" loading="lazy" width="900" height="1955"></span><figcaption><b>Sınıfı paylaşın</b>Parolalı dosya ya da QR kod. Karşı taraf listeyi kendi uygulamasında açar.</figcaption></figure></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="kucuk">
+      <h2><span class="no">05</span> Sınıfta işe yarayan küçük şeyler</h2>
+      <p>Ders arasında telefonu elinize alıp uzun uzun gezinmek istemezsiniz. Bu yüzden en sık yaptığınız işler yüzeye çıkarıldı.</p>
+      <div class="ozet">
+        <div class="ozet-kart"><div class="ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18.5h2"/></svg></div><h3>Ana ekran kısayolu</h3><p>Telefonun ana ekranından uygulamayı açmadan puan verirsiniz. Siri'ye sınıf adını söylemeniz de yeterli.</p></div>
+        <div class="ozet-kart"><div class="ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></div><h3>Ana ekran widget'ı</h3><p>O günkü dersiniz ve ajandanız telefonun ana ekranında görünür.</p></div>
+        <div class="ozet-kart"><div class="ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg></div><h3>Grup yapıcı</h3><p>Sınıfı rastgele ya da dengeli gruplara böler, tahtaya yansıtabilirsiniz.</p></div>
+        <div class="ozet-kart"><div class="ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><h3>Uygulama kilidi</h3><p>Telefonu masada bıraktığınızda öğrenci verisine kimse bakamasın diye parmak izi ya da yüz kilidi.</p></div>
+      </div>
+    </section>
+
+    <section id="paylasim">
+      <h2><span class="no">06</span> Sınıfı başka bir öğretmene gönderme</h2>
+      <p>Aynı sınıfa giren iki öğretmen listeyi iki kez yazmasın diye iki yol var.</p>
+      <ul class="satirlar">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3h-3zM20 14h1M14 20h3M20 17v4"/></svg><span><b>Yan yanaysanız QR kod</b> · Biri kodu gösterir, diğeri kamerayla okutur. Liste saniyeler içinde karşı tarafa geçer.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H7a2.5 2.5 0 0 0-2.5 2.5v15A2.5 2.5 0 0 0 7 22h10a2.5 2.5 0 0 0 2.5-2.5V7.5z"/><path d="M14 2v5.5h5.5"/></svg><span><b>Uzaktaysanız dosya</b> · Sınıfı dosya olarak dışa aktarıp mesajlaşma uygulamasıyla ya da e-postayla gönderirsiniz.</span></li>
+      </ul>
+      <div class="not">
+        <p><b>Paylaşılan yalnız listedir.</b> Karşı tarafa öğrenci adları gider, sizin verdiğiniz puanlar, notlar ve veli görüşmeleri sizde kalır.</p>
+      </div>
+    </section>
+
+    <section id="yedek">
+      <h2><span class="no">07</span> Yedekleme · en çok önemsediğimiz bölüm</h2>
+      <p>Bir yılın kaydı telefonla birlikte kaybolmasın diye yedekleme birden fazla yoldan çalışır.</p>
+      <ol class="adimlar">
+        <li><b>Elle yedek.</b> Tek dokunuşla parolalı bir yedek dosyası çıkarır, istediğiniz yere kaydedersiniz.</li>
+        <li><b>Otomatik yedek.</b> Açtığınızda uygulama belirli aralıklarla kendi yedeğini alır.</li>
+        <li><b>iCloud.</b> iPhone ve iPad'de açarsanız veriniz kendi iCloud hesabınızda tutulur ve diğer cihazınıza geçer. Kapalıyken hiçbir şey buluta çıkmaz.</li>
+        <li><b>Geri yükleme.</b> Yeni telefona geçtiğinizde yedeği seçip geri yüklersiniz, kaldığınız yerden devam eder.</li>
+      </ol>
+      <div class="not uyari">
+        <p><b>Yedek parolasını siz belirlersiniz</b> ve kaybolursa dosya açılamaz, uygulamanın bile açacak bir yolu yoktur. Parolayı güvenli bir yere not edin.</p>
+      </div>
+    </section>
+
+    <section id="gizlilik">
+      <h2><span class="no">08</span> Öğrenci verisi kimsenin işi değil</h2>
+      <p>Elinizin altındaki veri çocuklara ait. Uygulama bu yüzden en baştan sunucusuz kuruldu, kayıtlar bizim göremediğimiz bir yerde, kendi cihazınızda durur.</p>
+      <ul class="satirlar">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6z"/><path d="M9 12l2 2 4-4"/></svg><span><b>Hesap yok</b> · Kayıt olmuyorsunuz, giriş yapmıyorsunuz. Toplanacak bir kullanıcı hesabı yok.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.5-9 6 6 0 0 1 11.6 1.6A3.9 3.9 0 0 1 17.5 18z"/></svg><span><b>Bulut sizin</b> · iCloud'a yazılan veri sizin Apple hesabınızda durur, bizim erişimimiz yoktur.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.2 2.4 2.4 4.6-4.9"/></svg><span><b>Tek istisna şeffaf</b> · Yalnızca Bize Ulaşın formunu doldurduğunuzda adınız, e-postanız ve mesajınız bize gelir. Silinmesini isteyebilirsiniz.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span><b>Her şey silinebilir</b> · Ayarlar &gt; Tüm veriyi sil ile cihazdaki ve iCloud'daki her kayıt kalıcı olarak kaldırılır.</span></li>
+      </ul>
+      <p>Ayrıntısı için <a href="https://dalgali.github.io/arti-eksi-gizlilik/">gizlilik politikasını</a> okuyabilirsiniz, metin uygulamanın kaynak kodundaki gerçek veri akışına göre yazıldı.</p>
+    </section>
+
+    <section id="kimler">
+      <h2><span class="no">09</span> Kimin işine yarar</h2>
+      <ul class="satirlar">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg><span><b>Sınıf öğretmeni</b> · Tek sınıfın her şeyini takip eder: davranış, ödev, veli görüşmesi, ilk okuma yazma.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg><span><b>Branş öğretmeni</b> · Onlarca sınıfı yan yana tutar, ders programına göre günün sınıfını öne çıkarır.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><span><b>Özel ders veren öğretmen</b> · Birebir Ders bölümü program, deneme takibi, ödev ve ücret hesabını bir arada tutar.</span></li>
+      </ul>
+    </section>
+
+    <section id="iletisim">
+      <h2><span class="no">10</span> İletişim</h2>
+      <p>Soru, öneri ya da bir sorun bildirimi için yazabilirsiniz. Uygulamanın içinden <strong>Ayarlar &gt; Bize Ulaşın</strong> ile de ulaşabilirsiniz.</p>
+      <div class="kart">
+        <p class="eposta-satir">
+          <a class="dugme dugme-birincil eposta-gonder" href="#iletisim" aria-label="E-posta gönder" rel="nofollow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg>
+            E-posta gönder
+          </a>
+          <button type="button" class="dugme dugme-ikincil eposta-kopyala" aria-label="E-posta adresini panoya kopyala">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M15 5.5A2.5 2.5 0 0 0 12.5 3h-7A2.5 2.5 0 0 0 3 5.5v7A2.5 2.5 0 0 0 5.5 15"/></svg>
+            Adresi kopyala
+          </button>
+          <span class="eposta-durum" role="status" aria-live="polite"></span>
+        </p>
+        <p class="eposta-aciklama">Adres istenmeyen postaya karşı sayfada gizli tutulur, düğmeye bastığınızda açılır.</p>
+      </div>
+      <div class="yanit-suresi">
+        <p style="margin-bottom:0">Gelen mesajları en geç <strong>30 gün içinde</strong> yanıtlıyoruz, genellikle çok daha erken.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="buyutec" id="buyutec" role="dialog" aria-modal="true" aria-label="Ekran görüntüsü">
+  <button type="button" class="bt-kapat" id="bt-kapat" aria-label="Kapat">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <button type="button" class="bt-ok geri" id="bt-geri" aria-label="Önceki">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+  </button>
+  <button type="button" class="bt-ok ileri" id="bt-ileri" aria-label="Sonraki">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+  </button>
+  <figure>
+    <img id="bt-gorsel" src="" alt="">
+    <figcaption id="bt-yazi"></figcaption>
+  </figure>
+  <p class="bt-sayac" id="bt-sayac"></p>
+</div>
+
+<footer>
+  <div class="ic">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="49.5" fill="var(--logo-acik)"/>
+      <path d="M50 2 a48 48 0 0 1 0 96 a24 24 0 0 1 0-48 a24 24 0 0 0 0-48" fill="var(--logo-mor)"/>
+      <rect x="39.5" y="24" width="21" height="4.6" rx="1.2" fill="var(--logo-mor)"/>
+      <rect x="47.7" y="15.8" width="4.6" height="21" rx="1.2" fill="var(--logo-mor)"/>
+      <rect x="39.5" y="72" width="21" height="4" rx="1.2" fill="var(--logo-acik)"/>
+      <circle cx="50" cy="50" r="48" fill="none" stroke="var(--logo-mor)" stroke-width="3"/>
+    </svg>
+    <span>Artı Eksi · <a href="https://dalgali.github.io/arti-eksi-gizlilik/">Gizlilik politikası</a> · <a class="eposta-gonder" href="#iletisim" aria-label="E-posta gönder" rel="nofollow">E-posta</a></span>
+  </div>
+</footer>
+<script>
+(function () {
+  var baglar = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  if (!baglar.length || !('IntersectionObserver' in window)) return;
+  var harita = {};
+  var bolumler = [];
+  baglar.forEach(function (b) {
+    var kimlik = b.getAttribute('href').slice(1);
+    var bolum = document.getElementById(kimlik);
+    if (!bolum) return;
+    harita[kimlik] = b;
+    bolumler.push(bolum);
+  });
+  var gorunenler = {};
+  var gozlemci = new IntersectionObserver(function (girisler) {
+    girisler.forEach(function (g) { gorunenler[g.target.id] = g.isIntersecting; });
+    var etkin = null;
+    for (var i = 0; i < bolumler.length; i++) {
+      if (gorunenler[bolumler[i].id]) { etkin = bolumler[i].id; break; }
+    }
+    if (!etkin) return;
+    baglar.forEach(function (b) { b.classList.remove('etkin'); b.removeAttribute('aria-current'); });
+    harita[etkin].classList.add('etkin');
+    harita[etkin].setAttribute('aria-current', 'true');
+  }, { rootMargin: '-15% 0px -65% 0px', threshold: 0 });
+  bolumler.forEach(function (b) { gozlemci.observe(b); });
+})();
+
+// E-posta maskeleme: adres kaynakta yok, calisma aninda karakter kodlarindan kurulur.
+(function () {
+  var kod = [100, 97, 108, 103, 97, 108, 105, 99, 101, 109, 97, 108, 64,
+             103, 109, 97, 105, 108, 46, 99, 111, 109];
+  function adres() {
+    var m = '';
+    for (var i = 0; i < kod.length; i++) { m += String.fromCharCode(kod[i]); }
+    return m;
+  }
+  var dizi = Array.prototype.forEach;
+  // Adres hicbir zaman DOM'a yazilmaz; yalnizca href, etkilesim aninda kurulur.
+  dizi.call(document.querySelectorAll('a.eposta-gonder'), function (a) {
+    var kur = function () { a.setAttribute('href', 'mailto:' + adres()); };
+    ['focus', 'mouseenter', 'mousedown', 'touchstart', 'keydown'].forEach(function (olay) {
+      a.addEventListener(olay, kur);
+    });
+  });
+  dizi.call(document.querySelectorAll('.eposta-kopyala'), function (d) {
+    d.addEventListener('click', function () {
+      if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+      var durum = d.parentNode.querySelector('.eposta-durum');
+      navigator.clipboard.writeText(adres()).then(function () {
+        if (!durum) return;
+        durum.textContent = 'Kopyalandı';
+        setTimeout(function () { durum.textContent = ''; }, 2200);
+      }, function () {});
+    });
+  });
+})();
+</script>
+
+<script>
+// Tanitim sayfasindaki canli deneme karti.
+(function () {
+  var kart = document.getElementById('dkart');
+  if (!kart) return;
+
+  var el = {
+    arti: document.getElementById('d-arti'),
+    eksi: document.getElementById('d-eksi'),
+    pas: document.getElementById('d-pas'),
+    net: document.getElementById('d-net'),
+    netKutu: document.getElementById('d-net-kutu'),
+    durum: document.getElementById('d-durum'),
+    mesaj: document.getElementById('d-mesaj'),
+    oynat: document.getElementById('d-oynat'),
+    sifirla: document.getElementById('d-sifirla')
+  };
+
+  var sayac = { arti: 0, eksi: 0, pas: 0 };
+  var zamanlayicilar = [];
+  var oynuyor = false;
+
+  var metin = {
+    arti: 'Cahit Sıtkı’ya <b>artı</b> verildi.',
+    eksi: 'Cahit Sıtkı’ya <b>eksi</b> verildi.',
+    pas: 'Bugün <b>pas</b> geçildi, puana yansımadı.'
+  };
+
+  function ciz() {
+    var net = sayac.arti - sayac.eksi;
+    el.arti.textContent = sayac.arti;
+    el.eksi.textContent = sayac.eksi;
+    el.pas.textContent = sayac.pas;
+    el.net.textContent = (net > 0 ? '+' : '') + net;
+    el.netKutu.className = 'dnet' + (net > 0 ? ' pozitif' : net < 0 ? ' negatif' : '');
+    el.durum.className = 'ddurum' + (net > 0 ? ' artida' : net < 0 ? ' eksida' : '');
+    el.durum.textContent = net > 0 ? 'Artıda' : net < 0 ? 'Eksi birikmiş' : 'Sıfır';
+  }
+
+  function isaretle(tur) {
+    sayac[tur] += 1;
+    ciz();
+    el.mesaj.innerHTML = metin[tur];
+    var tus = kart.querySelector('.dtus[data-isaret="' + tur + '"]');
+    if (!tus) return;
+    tus.classList.remove('vuruldu');
+    void tus.offsetWidth;
+    tus.classList.add('vuruldu');
+  }
+
+  function durdur() {
+    zamanlayicilar.forEach(clearTimeout);
+    zamanlayicilar = [];
+    oynuyor = false;
+    el.oynat.disabled = false;
+  }
+
+  function sifirla(sessiz) {
+    durdur();
+    sayac = { arti: 0, eksi: 0, pas: 0 };
+    ciz();
+    if (!sessiz) el.mesaj.textContent = 'Sıfırlandı. İsterseniz siz deneyin.';
+  }
+
+  function oynatDemo() {
+    if (oynuyor) return;
+    sifirla(true);
+    oynuyor = true;
+    el.oynat.disabled = true;
+    el.mesaj.textContent = 'Bir ders saati canlandırılıyor…';
+    var sira = ['arti', 'arti', 'eksi', 'pas'];
+    sira.forEach(function (tur, i) {
+      zamanlayicilar.push(setTimeout(function () { isaretle(tur); }, 700 + i * 950));
+    });
+    zamanlayicilar.push(setTimeout(function () {
+      el.mesaj.innerHTML = 'Gün böyle biriktirilir, dönem sonunda rapor bu kayıtlardan çıkar. <b>Şimdi siz deneyin.</b>';
+      oynuyor = false;
+      el.oynat.disabled = false;
+    }, 700 + sira.length * 950 + 500));
+  }
+
+  Array.prototype.forEach.call(kart.querySelectorAll('.dtus'), function (t) {
+    t.addEventListener('click', function () {
+      durdur();
+      isaretle(t.getAttribute('data-isaret'));
+    });
+  });
+  el.oynat.addEventListener('click', oynatDemo);
+  el.sifirla.addEventListener('click', function () { sifirla(false); });
+
+  ciz();
+})();
+</script>
+
+<script>
+// Ekran goruntusu galerisi + buyutme katmani.
+(function () {
+  var serit = document.getElementById('serit');
+  var katman = document.getElementById('buyutec');
+  if (!serit || !katman) return;
+
+  var kareler = Array.prototype.slice.call(serit.querySelectorAll('.kare'));
+  var gorsel = document.getElementById('bt-gorsel');
+  var yazi = document.getElementById('bt-yazi');
+  var sayacYazi = document.getElementById('bt-sayac');
+  var sira = 0;
+  var sonOdak = null;
+
+  function goster(i) {
+    sira = (i + kareler.length) % kareler.length;
+    var kare = kareler[sira];
+    var res = kare.querySelector('img');
+    var alt = kare.querySelector('figcaption');
+    gorsel.src = res.getAttribute('src');
+    gorsel.alt = res.getAttribute('alt');
+    yazi.innerHTML = alt.innerHTML;
+    sayacYazi.textContent = (sira + 1) + ' / ' + kareler.length;
+  }
+
+  function ac(i) {
+    sonOdak = document.activeElement;
+    goster(i);
+    katman.setAttribute('open', '');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('bt-kapat').focus();
+  }
+
+  function kapat() {
+    katman.removeAttribute('open');
+    document.body.style.overflow = '';
+    if (sonOdak && sonOdak.focus) sonOdak.focus();
+  }
+
+  kareler.forEach(function (k, i) {
+    k.addEventListener('click', function () { ac(i); });
+  });
+  document.getElementById('bt-kapat').addEventListener('click', kapat);
+  document.getElementById('bt-geri').addEventListener('click', function () { goster(sira - 1); });
+  document.getElementById('bt-ileri').addEventListener('click', function () { goster(sira + 1); });
+  katman.addEventListener('click', function (o) { if (o.target === katman) kapat(); });
+  document.addEventListener('keydown', function (o) {
+    if (!katman.hasAttribute('open')) return;
+    if (o.key === 'Escape') kapat();
+    else if (o.key === 'ArrowLeft') goster(sira - 1);
+    else if (o.key === 'ArrowRight') goster(sira + 1);
+  });
+})();
+</script>
+
+</body>
+</html>
