@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Destek · Artı Eksi</title>
+<meta name="description" content="Artı Eksi destek sayfası: sık sorulan sorular, yedekleme ve veri taşıma yardımı, iletişim.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#46178F">
+<meta property="og:title" content="Destek · Artı Eksi">
+<meta property="og:description" content="Sık sorulan sorular, yedekleme yardımı ve iletişim.">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://dalgali.github.io/arti-eksi/destek.html">
+<style>
+  :root {
+    --mor: #46178F;
+    --mor-koyu: #7C3AED;
+    --mor-yumusak: #EDE9FE;
+    --arti: #15803D;
+    --eksi: #B91C1C;
+    --zemin: #FFFFFF;
+    --kart: #FFFFFF;
+    --yuzey: #FAFAFA;
+    --yazi: #111827;
+    --yazi-ikincil: #4B5563;
+    --silik: #6B7280;
+    --kenarlik: #C4B5FD;
+    --ayirici: #DDD6FE;
+    --vurgu: var(--mor);
+    --hero-1: #46178F;
+    --hero-2: #7C3AED;
+    --golge: 0 1px 2px rgba(17, 24, 39, .04), 0 10px 28px rgba(70, 23, 143, .07);
+    --r: 16px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --zemin: #09090B;
+      --kart: #18181B;
+      --yuzey: #131316;
+      --yazi: #F3F4F6;
+      --yazi-ikincil: #A1A1AA;
+      --silik: #71717A;
+      --kenarlik: #5B21B6;
+      --ayirici: #4C1D95;
+      --mor-yumusak: #2A1259;
+      --vurgu: #C4B5FD;
+      --golge: 0 1px 2px rgba(0, 0, 0, .5), 0 10px 28px rgba(0, 0, 0, .45);
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--zemin);
+    color: var(--yazi);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    overflow-wrap: break-word;
+    text-rendering: optimizeLegibility;
+  }
+  @media (max-width: 640px) { body { font-size: 16px; } }
+
+  .atla {
+    position: absolute; left: -9999px;
+    background: var(--vurgu); color: #FFF;
+    padding: 10px 16px; border-radius: 8px; z-index: 10;
+  }
+  .atla:focus { left: 12px; top: 12px; }
+
+  header.hero {
+    background: linear-gradient(135deg, var(--hero-1), var(--hero-2));
+    color: #FFFFFF;
+    padding: 52px 20px 46px;
+    text-align: center;
+  }
+  header.hero h1 {
+    margin: 0 0 10px;
+    font-size: clamp(1.6rem, 5vw, 2.3rem);
+    line-height: 1.22;
+    letter-spacing: -.02em;
+    font-weight: 780;
+  }
+  header.hero p {
+    margin: 0 auto;
+    max-width: 46ch;
+    font-size: 1.02rem;
+    color: rgba(255, 255, 255, .92);
+  }
+  .amblem {
+    width: 60px; height: 60px;
+    margin: 0 auto 16px;
+    display: grid; place-items: center;
+    background: rgba(255, 255, 255, .14);
+    border: 1px solid rgba(255, 255, 255, .3);
+    border-radius: 18px;
+  }
+  .amblem svg { width: 32px; height: 32px; }
+
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 20px 12px;
+  }
+
+  section { scroll-margin-top: 24px; margin: 0 0 44px; }
+
+  h2 {
+    display: flex; align-items: baseline; gap: 12px;
+    font-size: clamp(1.28rem, 3.4vw, 1.62rem);
+    line-height: 1.3; letter-spacing: -.015em; font-weight: 750;
+    margin: 0 0 14px;
+  }
+  .no {
+    flex: none;
+    font-size: .78rem; font-weight: 700; letter-spacing: .04em;
+    color: var(--vurgu);
+    background: var(--mor-yumusak);
+    border: 1px solid var(--kenarlik);
+    border-radius: 8px;
+    padding: 2px 8px;
+    line-height: 1.5;
+  }
+  h3 { font-size: 1.02rem; font-weight: 700; margin: 0 0 6px; }
+  p { margin: 0 0 14px; }
+  .ikincil { color: var(--yazi-ikincil); }
+
+  .kart {
+    background: var(--kart);
+    border: 1px solid var(--ayirici);
+    border-radius: var(--r);
+    padding: 20px 22px;
+    box-shadow: var(--golge);
+    margin: 0 0 18px;
+  }
+  .kart > :last-child { margin-bottom: 0; }
+
+  .uyari {
+    border-left: 4px solid var(--eksi);
+    background: var(--yuzey);
+  }
+  .vurgulu { border-left: 4px solid var(--vurgu); background: var(--yuzey); }
+
+  details.sss {
+    border: 1px solid var(--ayirici);
+    border-radius: 12px;
+    background: var(--kart);
+    padding: 0;
+    margin: 0 0 10px;
+    box-shadow: var(--golge);
+  }
+  details.sss > summary {
+    cursor: pointer;
+    padding: 14px 18px;
+    font-weight: 650;
+    list-style: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  details.sss > summary::-webkit-details-marker { display: none; }
+  details.sss > summary::before {
+    content: "+";
+    flex: none;
+    width: 22px; height: 22px;
+    display: grid; place-items: center;
+    border-radius: 6px;
+    background: var(--mor-yumusak);
+    color: var(--vurgu);
+    border: 1px solid var(--kenarlik);
+    font-weight: 700; font-size: .9rem; line-height: 1;
+  }
+  details.sss[open] > summary::before { content: "−"; }
+  details.sss > summary:focus-visible {
+    outline: 2px solid var(--vurgu); outline-offset: 2px; border-radius: 12px;
+  }
+  details.sss .govde { padding: 0 18px 16px; }
+  details.sss .govde > :last-child { margin-bottom: 0; }
+
+  .dugme {
+    font: inherit; font-size: .92rem; font-weight: 650; line-height: 1.4;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 18px; border-radius: 999px;
+    text-decoration: none; cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .dugme svg { width: 17px; height: 17px; flex: none; }
+  .dugme-birincil { background: var(--vurgu); color: #FFFFFF; border-color: var(--vurgu); }
+  .dugme-ikincil { background: var(--mor-yumusak); color: var(--vurgu); border-color: var(--kenarlik); }
+  @media (prefers-color-scheme: dark) {
+    .dugme-birincil { color: #1B0B36; }
+  }
+  .dugme:focus-visible { outline: 2px solid var(--vurgu); outline-offset: 3px; }
+
+  .eposta-satir { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .eposta-durum { font-size: .88rem; color: var(--arti); font-weight: 600; }
+  .eposta-aciklama { font-size: .9rem; color: var(--silik); margin-bottom: 0; }
+
+  ul { margin: 0 0 14px; padding-left: 1.2em; }
+  li { margin-bottom: 7px; }
+  li:last-child { margin-bottom: 0; }
+
+  .yol {
+    font-weight: 650;
+    background: var(--mor-yumusak);
+    color: var(--vurgu);
+    border: 1px solid var(--kenarlik);
+    border-radius: 6px;
+    padding: 1px 7px;
+    font-size: .93em;
+    white-space: nowrap;
+  }
+
+  footer {
+    border-top: 1px solid var(--ayirici);
+    background: var(--yuzey);
+    padding: 28px 20px 40px;
+    text-align: center;
+    color: var(--yazi-ikincil);
+    font-size: .93rem;
+  }
+  footer a { color: var(--vurgu); }
+  footer nav { margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: center; }
+</style>
+</head>
+<body>
+
+<a class="atla" href="#iletisim">İçeriğe atla</a>
+
+<header class="hero">
+  <div class="amblem">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2"
+         stroke-linecap="round" aria-hidden="true">
+      <path d="M4 8h8M8 4v8M14 17h6"/>
+    </svg>
+  </div>
+  <h1>Artı Eksi · Destek</h1>
+  <p>Bir sorun mu var, bir şey mi takıldı? Aşağıdaki sorular çoğu durumu
+     karşılıyor. Karşılamıyorsa bize yazın.</p>
+</header>
+
+<main>
+
+  <section id="iletisim">
+    <h2><span class="no">01</span> Bize ulaşın</h2>
+    <p>En hızlı yol uygulamanın içinden yazmaktır: <span class="yol">Ayarlar &gt; Bize Ulaşın</span>.
+       Bu form uygulama sürümünü ve platformu kendiliğinden ekler, böylece sorunu
+       daha çabuk anlarız.</p>
+
+    <div class="kart">
+      <p class="eposta-satir">
+        <a class="dugme dugme-birincil eposta-gonder" href="#iletisim"
+           aria-label="E-posta gönder" rel="nofollow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="M3 7l9 6 9-6"/>
+          </svg>
+          E-posta gönder
+        </a>
+        <button type="button" class="dugme dugme-ikincil eposta-kopyala"
+                aria-label="E-posta adresini panoya kopyala">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="12" height="12" rx="2.5"/>
+            <path d="M15 5.5A2.5 2.5 0 0 0 12.5 3h-7A2.5 2.5 0 0 0 3 5.5v7A2.5 2.5 0 0 0 5.5 15"/>
+          </svg>
+          Adresi kopyala
+        </button>
+        <span class="eposta-durum" role="status" aria-live="polite"></span>
+      </p>
+      <p class="eposta-aciklama">Adres istenmeyen postaya karşı sayfada gizli tutulur,
+         düğmeye bastığınızda açılır. Genellikle birkaç gün içinde dönüş yapılır.</p>
+    </div>
+
+    <div class="kart uyari">
+      <h3>Ekran görüntüsü gönderirken öğrenci bilgilerini gizleyin</h3>
+      <p class="ikincil" style="margin-bottom:0">Uygulamadan gönderdiğiniz ekran
+         görüntüleri, bizim erişemediğimiz üçüncü taraf bir görsel servisine yüklenir
+         ve bağlantıyı bilen herkes açabilir. Göndermeden önce öğrenci adı, okul
+         numarası, telefon numarası ve not bilgilerini karalayın.</p>
+    </div>
+  </section>
+
+  <section id="yedek">
+    <h2><span class="no">02</span> Yedekleme ve veri taşıma</h2>
+
+    <div class="kart uyari">
+      <h3>Yedek parolanızı unutmayın</h3>
+      <p class="ikincil" style="margin-bottom:0">Yedek dosyasının parolasını siz
+         belirlersiniz ve o parola cihazınızda saklanmaz. Bizde de bir kopyası yoktur.
+         Parola unutulursa <strong>o yedek dosyası açılamaz</strong> ve kurtarma yolu
+         yoktur. Parolanızı güvendiğiniz bir yere not edin.</p>
+    </div>
+
+    <details class="sss">
+      <summary>Yeni telefona nasıl geçerim?</summary>
+      <div class="govde">
+        <p>Eski cihazda <span class="yol">Ayarlar &gt; Verilerim ve Gizlilik &gt; Yedekleme &gt; Yedek oluştur</span>
+           deyin, bir parola belirleyin ve dosyayı kendinize gönderin. Yeni cihazda
+           uygulamayı kurup <span class="yol">Yedekten geri yükle</span> ile aynı dosyayı ve parolayı verin.</p>
+        <p style="margin-bottom:0">iPhone kullanıyorsanız iCloud senkronunu açmak da bir
+           seçenektir; iki cihazda aynı Apple hesabı varsa veri kendiliğinden taşınır.</p>
+      </div>
+    </details>
+
+    <details class="sss">
+      <summary>Verilerim nerede duruyor?</summary>
+      <div class="govde">
+        <p style="margin-bottom:0">Öğrenci listeleri, puanlar ve notlar cihazınızın
+           kendi deposunda durur. Uygulamanın arka uç sunucusu yoktur ve öğrenci
+           verileri bize gönderilmez. iCloud senkronunu açarsanız veri yalnızca
+           <strong>sizin</strong> Apple hesabınıza ait özel alana yazılır.
+           Ayrıntısı <a href="https://dalgali.github.io/arti-eksi-gizlilik/">gizlilik politikasında</a>.</p>
+      </div>
+    </details>
+
+    <details class="sss">
+      <summary>iCloud senkronunu nasıl açarım? (iPhone / iPad)</summary>
+      <div class="govde">
+        <p style="margin-bottom:0"><span class="yol">Ayarlar &gt; Verilerim ve Gizlilik &gt; iCloud &gt; iCloud ile senkronla</span>.
+           Cihazın iCloud hesabına giriş yapmış olması gerekir. Senkron açıkken
+           iCloud yedeğini silmek tek başına yetmez; senkron açık kaldığı sürece
+           yedek yeniden oluşur, önce senkronu kapatın.</p>
+      </div>
+    </details>
+
+    <details class="sss">
+      <summary>Otomatik yedek nedir?</summary>
+      <div class="govde">
+        <p style="margin-bottom:0">Uygulama düzenli aralıkla cihazın içinde sessiz bir
+           yedek dosyası tutar. Bu dosya cihaz anahtarıyla şifrelenir ve cihazdan
+           çıkmaz. Başka bir cihaza taşımak için elle yedek oluşturmanız gerekir,
+           çünkü paylaşılabilir yedek sizin belirlediğiniz parolayla şifrelenir.</p>
+      </div>
+    </details>
+  </section>
+
+  <section id="veri">
+    <h2><span class="no">03</span> Verinizi silme ve dışa aktarma</h2>
+
+    <details class="sss">
+      <summary>Tüm verimi nasıl silerim?</summary>
+      <div class="govde">
+        <p><span class="yol">Ayarlar &gt; Sıfırlama &gt; Tüm verileri sil</span>. Bu işlem
+           sınıfları, öğrencileri, puanları, ödevleri, notları ve modül verilerini
+           cihazdan kaldırır.</p>
+        <p style="margin-bottom:0">İşlem geri alınamaz. Silmeden önce yedek almanız
+           istenir; yedeksiz devam etmeyi seçerseniz ayrıca onay sorulur.</p>
+      </div>
+    </details>
+
+    <details class="sss">
+      <summary>iCloud'daki kopyayı da silmek istiyorum</summary>
+      <div class="govde">
+        <p style="margin-bottom:0">Önce <span class="yol">Ayarlar &gt; Verilerim ve Gizlilik &gt; iCloud</span>
+           bölümünden senkronu kapatın, sonra <span class="yol">iCloud yedeğini sil</span>
+           deyin. Sıralama önemlidir: senkron açık kalırsa silinen yedek yeniden oluşur.</p>
+      </div>
+    </details>
+
+    <details class="sss">
+      <summary>Verimi dışarı alabilir miyim?</summary>
+      <div class="govde">
+        <p style="margin-bottom:0">Evet. <span class="yol">Yedek oluştur</span> ile tüm
+           veriniz tek bir dosyaya çıkar ve dilediğiniz yere gönderebilirsiniz. Ayrıca
+           karne ve raporları PDF olarak paylaşabilirsiniz.</p>
+      </div>
+    </details>
+  </section>
+
+  <section id="kullanim">
+    <h2><span class="no">04</span> Sık sorulanlar</h2>
+
+    <details class="sss">
+      <summary>Öğrencileri tek tek yazmak zorunda mıyım?</summary>
+      <div class="govde">
+        <p style="margin-bottom:0">Hayır. e-Okul'dan aldığınız sınıf listesini fotoğrafını
+           çekerek veya PDF olarak vererek aktarabilirsiniz; uygulama isimleri okur ve
+           onayınıza sunar. Bir meslektaşınız sınıfını size QR kodla da gönderebilir.
+           Elle ekleme her zaman açıktır.</p>
+      </div>
+    </details>
+
+    <details class="sss">
+      <summary>Birebir Eğitim bölümünü göremiyorum</summary>
+      <div class="govde">
+        <p style="margin-bottom:0">Bu bölüm varsayılan olarak kapalıdır.
+           <span class="yol">Ayarlar &gt; Modüller &gt; Birebir Eğitim</span> anahtarını açın;
+           alt menüde yeni bir sekme belirir.</p>
+      </div>
+    </details>
+
+    <details class="sss">
+      <summary>Ana ekran widget'ı nasıl eklenir?</summary>
+      <div class="govde">
+        <p style="margin-bottom:0">Telefonun ana ekranında boş bir yere basılı tutup
+           widget listesinden Artı Eksi'yi seçin. Android'de
+           <span class="yol">Ayarlar &gt; Görünüm &gt; Ana ekran widget'ı</span> üzerinden de
+           ekleme isteği gönderebilirsiniz.</p>
+      </div>
+    </details>
+
+    <details class="sss">
+      <summary>Uygulama ücretli mi? Reklam var mı?</summary>
+      <div class="govde">
+        <p style="margin-bottom:0">Uygulama içinde satın alma yoktur. Reklam SDK'sı,
+           analitik aracı veya çökme raporlama servisi de bulunmaz.</p>
+      </div>
+    </details>
+
+    <details class="sss">
+      <summary>Uygulama internet olmadan çalışır mı?</summary>
+      <div class="govde">
+        <p style="margin-bottom:0">Evet. Günlük kullanımın tamamı çevrimdışı çalışır.
+           İnternet yalnız iCloud senkronu ve Bize Ulaşın formu için gerekir.</p>
+      </div>
+    </details>
+  </section>
+
+</main>
+
+<footer>
+  <nav>
+    <a href="./">Tanıtım sayfası</a>
+    <a href="https://dalgali.github.io/arti-eksi-gizlilik/">Gizlilik politikası</a>
+    <a href="#iletisim">İletişim</a>
+  </nav>
+  <p style="margin-bottom:0">Artı Eksi · Geliştirici: Cemal Dalgalı</p>
+</footer>
+
+<script>
+// E-posta maskeleme: adres kaynakta duz metin olarak yok, calisma aninda
+// karakter kodlarindan kurulur.
+(function () {
+  var kod = [100, 97, 108, 103, 97, 108, 105, 99, 101, 109, 97, 108, 64,
+             103, 109, 97, 105, 108, 46, 99, 111, 109];
+  function adres() {
+    var m = '';
+    for (var i = 0; i < kod.length; i++) { m += String.fromCharCode(kod[i]); }
+    return m;
+  }
+  function durumYaz(metin) {
+    var alan = document.querySelector('.eposta-durum');
+    if (!alan) return;
+    alan.textContent = metin;
+    window.setTimeout(function () { alan.textContent = ''; }, 2600);
+  }
+  var gonder = document.querySelector('.eposta-gonder');
+  if (gonder) {
+    gonder.addEventListener('click', function (olay) {
+      olay.preventDefault();
+      window.location.href = 'mailto:' + adres() +
+        '?subject=' + encodeURIComponent('Artı Eksi destek');
+    });
+  }
+  var kopyala = document.querySelector('.eposta-kopyala');
+  if (kopyala) {
+    kopyala.addEventListener('click', function () {
+      var a = adres();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(a).then(
+          function () { durumYaz('Kopyalandı'); },
+          function () { durumYaz(a); }
+        );
+      } else {
+        durumYaz(a);
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
